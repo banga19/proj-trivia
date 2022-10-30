@@ -1,4 +1,6 @@
 import os
+from unicodedata import category
+from urllib import response
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -16,6 +18,19 @@ def create_app(test_config=None):
     """
     @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
     """
+    @app.after_request
+    def after_request(response):
+        response.headers.add(
+            "Acess-Control-Allow-Origin", "*"
+        )
+        response.headers.add(
+            "Access-Control-Allow-Headers", "Content-Type,Authorization,true"
+        )
+        response.headers.add(
+            "Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS"
+        )
+
+        return response
 
     """
     @TODO: Use the after_request decorator to set Access-Control-Allow
@@ -26,7 +41,19 @@ def create_app(test_config=None):
     Create an endpoint to handle GET requests
     for all available categories.
     """
+    @app.route('/categories', methods=['GET'])
+    def retrieve_categories():
+        page = request.args.get('page', 1, type=int)
+        start = (page - 1) * 10
+        end = start + 10
 
+        categories = Category.query.all()
+        formatted_categories = [Category.format() for category in categories]
+
+        return jsonify({
+            "success": True,
+            "categories": formatted_categories,
+        })
 
     """
     @TODO:
