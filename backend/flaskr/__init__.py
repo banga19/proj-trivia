@@ -8,65 +8,71 @@ import random
 
 from models import setup_db, Question, Category
 
+# global GET categories func
+def get_categories_func():
+    categories = Category.query.order_by(Category.id).all()
+    category_obj = {}
+    for category in categories:
+        category_obj[category.id] = category.type
+    return category_obj
+    
+
 QUESTIONS_PER_PAGE = 10
+
+# creating the pagination effect for the app
+def paginated_guestions(request, selection):
+    page = request.args.get('page', 1, type=int)
+    start = (page - 1) * QUESTIONS_PER_PAGE
+    end = start + QUESTIONS_PER_PAGE
+
+    books = [question.format() for question in selection]
+    current_questions = books[start:end] 
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
     setup_db(app)
+    
+    #CORS initialization to ensure secure data acces & transmission accross multiple domains
+    CORS(app, resources={r"*": {"origins":"*"}})
 
-    """
-    @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
-    """
+    # Allowing CORS TO work on trivia app
     @app.after_request
     def after_request(response):
-        response.headers.add(
-            "Acess-Control-Allow-Origin", "*"
-        )
-        response.headers.add(
-            "Access-Control-Allow-Headers", "Content-Type,Authorization,true"
-        )
-        response.headers.add(
-            "Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS"
-        )
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization,true")
+        response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
 
         return response
 
-    """
-    @TODO: Use the after_request decorator to set Access-Control-Allow
-    """
 
-    """
-    @TODO:
-    Create an endpoint to handle GET requests
-    for all available categories.
-    """
+# GET Categories endpoint   
     @app.route('/categories', methods=['GET'])
     def retrieve_categories():
-        page = request.args.get('page', 1, type=int)
-        start = (page - 1) * 10
-        end = start + 10
-
-        categories = Category.query.all()
-        formatted_categories = [Category.format() for category in categories]
-
+        categories = get_categories_func()
         return jsonify({
             "success": True,
-            "categories": formatted_categories,
+            "categories": categories,
         })
 
-    """
-    @TODO:
-    Create an endpoint to handle GET requests for questions,
-    including pagination (every 10 questions).
-    This endpoint should return a list of questions,
-    number of total questions, current category, categories.
 
-    TEST: At this point, when you start the application
-    you should see questions and categories generated,
-    ten questions per page and pagination at the bottom of the screen for three pages.
-    Clicking on the page numbers should update the questions.
-    """
+#GET questions endpoint
+    @app.route('/questions', methods=['GET'])
+    def retrieve_questions():
+        selection = Question.query.order_by(Question.id).all()
+        current_questions = paginated_guestions(request, selection)
+        categories = get_categories_func()
+
+        if current_questions == 0:
+            abort(404)
+        else:
+            return jsonify({
+                "succes": True,
+                "categories": categories,
+                "total_number_of_questions": len(Question.query.all()),
+                "questions": current_questions,
+                "currentCategory": 'Science'
+            })
+
 
     """
     @TODO:
