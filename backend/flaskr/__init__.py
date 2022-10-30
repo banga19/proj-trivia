@@ -8,14 +8,7 @@ import random
 
 from models import setup_db, Question, Category
 
-# global GET categories func
-def get_categories_func():
-    categories = Category.query.order_by(Category.id).all()
-    category_obj = {}
-    for category in categories:
-        category_obj[category.id] = category.type
-    return category_obj
-    
+
 
 QUESTIONS_PER_PAGE = 10
 
@@ -28,6 +21,15 @@ def paginated_guestions(request, selection):
     books = [question.format() for question in selection]
     current_questions = books[start:end] 
 
+# global GET categories func
+def get_categories_func():
+    categories = Category.query.order_by(Category.id).all()
+    category_obj = {}
+    for category in categories:
+        category_obj[category.id] = category.type
+    return category_obj
+    
+# Start of trivia app
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
@@ -75,13 +77,24 @@ def create_app(test_config=None):
 
 
     """
-    @TODO:
-    Create an endpoint to DELETE question using a question ID.
 
     TEST: When you click the trash icon next to a question, the question will be removed.
     This removal will persist in the database and when you refresh the page.
     """
+# DELETE specific question endpoint
+    @app.route('/questions/<int:question_id>', methods=["DELETE"])
+    def delete_specific_question(question_id):
+        question = Question.query.get(question_id)
 
+        if question is not None:
+            question.delete()
+
+            return jsonify({
+                "success": True
+            })
+        else:
+            abort(404)
+            
     """
     @TODO:
     Create an endpoint to POST a new question,
