@@ -8,11 +8,18 @@ import random
 
 from models import setup_db, Question, Category
 
-
+# global GET categories func
+def func_get_categories():
+    categories = Category.query.order_by(Category.id).all()
+    category_obj = {}
+    for category in categories:
+        category_obj[category.id] = category.type
+    return category_obj
+    
 
 QUESTIONS_PER_PAGE = 10
 
-# creating the pagination effect for the app
+# create pagination effect for the app
 def paginated_guestions(request, selection):
     page = request.args.get('page', 1, type=int)
     start = (page - 1) * QUESTIONS_PER_PAGE
@@ -21,14 +28,7 @@ def paginated_guestions(request, selection):
     books = [question.format() for question in selection]
     current_questions = books[start:end] 
 
-# global GET categories func
-def get_categories_func():
-    categories = Category.query.order_by(Category.id).all()
-    category_obj = {}
-    for category in categories:
-        category_obj[category.id] = category.type
-    return category_obj
-    
+
 # Start of trivia app
 def create_app(test_config=None):
     # create and configure the app
@@ -50,7 +50,8 @@ def create_app(test_config=None):
 # GET Categories endpoint   
     @app.route('/categories', methods=['GET'])
     def retrieve_categories():
-        categories = get_categories_func()
+        categories = func_get_categories()
+
         return jsonify({
             "success": True,
             "categories": categories,
@@ -62,7 +63,7 @@ def create_app(test_config=None):
     def retrieve_questions():
         selection = Question.query.order_by(Question.id).all()
         current_questions = paginated_guestions(request, selection)
-        categories = get_categories_func()
+        categories = func_get_categories()
 
         if current_questions == 0:
             abort(404)
@@ -148,6 +149,13 @@ def create_app(test_config=None):
     Create error handlers for all expected errors
     including 404 and 422.
     """
+    @app.errorhandler(404)
+    def resource_not_found():
+        return jsonify({
+            "success":False,
+            "error": 404,
+            "message": "Resource Not Found"
+        }), 404
 
     return app
 
