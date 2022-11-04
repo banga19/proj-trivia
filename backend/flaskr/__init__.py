@@ -167,5 +167,14 @@ def create_app(test_config=None):
             "message": "Method Not Allowed"
         }), 405
 
+# 422 Error Handler
+    @app.errorhandler(422)
+    def unable_to_process(error):
+        return jsonify({
+            "success": False,
+            "error": 422,
+            "message": "unable to process request. Try Again",
+        }), 422
+
     return app
 
