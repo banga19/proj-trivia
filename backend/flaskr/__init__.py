@@ -146,7 +146,6 @@ def create_app(test_config=None):
 
     """
     @TODO:
-    Create a GET endpoint to get questions based on category.
 
     TEST: In the "List" tab / main screen, clicking on one of the
     categories in the left column will cause only questions of that
@@ -180,7 +179,30 @@ def create_app(test_config=None):
     and shown whether they were correct or not.
     """
 
+# POST endpoint to get questions to play the quiz
+    @app.route('/quizes', methods=['POST'])
+    def retrieve_random_quizes():
+        body = request.get_json()
+        print('Hello Here')
+        previous_questions = body.get('previous_questions', None)
+        quiz_category = body.get('quiz_category', None)
 
+        questions = Question.query.oder_by(Question.id).filter(Question.category == quiz_category['id'])
+        user_selected_question = []
+
+        for question in questions:
+            if question.id not in previous_questions:
+                user_selected_question.append(question)
+
+        random_index = random.randrange(len(user_selected_question))
+        random_question = user_selected_question[random_index]
+
+        return jsonify({
+            'success': True,
+            'question': random_question.format()
+        })
+
+# ERROR HANDLER ENDPOINTS
 # 404 ERROR endpoint
     @app.errorhandler(404)
     def resource_not_found(error):
