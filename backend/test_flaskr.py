@@ -41,7 +41,24 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['succes'], True)
 
-    
+    # test for GET endpoint responding to retrieving all paginated questions
+    def test_retrieve_paginated_questions(self):
+        res = self.client().get('questions')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['total_number_of_questions'])
+
+
+    def test_deleted_question(self):
+        res = self.client().delete('questions/2')
+
+        question_to_delete = Question.query.filter(Question.id == 2).one_or_none()
+        self.assertEqual(question_to_delete, None)
+
+        
+
 
 
 
