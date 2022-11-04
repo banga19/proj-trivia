@@ -64,8 +64,15 @@ class TriviaTestCase(unittest.TestCase):
         
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        
+    
+    # 404 ERROR HANDLER test past a valid page request
+    def test_404_request_past_valid_page(self):
+        res = self.client().get('/questions?page=1500', json={'answer', 'Impossible'})
+        data = json.loads(res.data)
 
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Resource Not Found')
 
 
 
