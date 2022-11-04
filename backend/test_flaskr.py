@@ -50,13 +50,20 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['total_number_of_questions'])
 
-
-    def test_deleted_question(self):
+    # test to DELETE specific using question_id
+    def test_delete_specific_question(self):
         res = self.client().delete('questions/2')
 
         question_to_delete = Question.query.filter(Question.id == 2).one_or_none()
         self.assertEqual(question_to_delete, None)
 
+    #test to CREATE new question 
+    def test_create_new_question(self):
+        res = self.client().post('questions', json={'question': 'Heres a new question in form of a string', 'answer': 'Here is an answer string', 'difficulty':1, 'category':3})
+        data = json.loads(res.data)
+        
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
         
 
 
