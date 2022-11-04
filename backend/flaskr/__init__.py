@@ -152,7 +152,7 @@ def create_app(test_config=None):
     category to be shown.
     """
     # GET endpoint to retrieve questions from DB in a specific category
-    @app.route('/categories/<int:category_id>/questions', methods=['GET'])
+    @app.route('/categories/<int:category_id>/questions', methods=['POST'])
     def retrieve_question_in_category(category_id):
         selection = Question.query.order_by(Question.id).filter(Question.category == category_id)
         current_questions = paginated_guestions(request, selection)
