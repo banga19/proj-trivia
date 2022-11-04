@@ -47,7 +47,7 @@ def create_app(test_config=None):
         return response
 
 
-# GET Categories endpoint   
+    # GET Categories endpoint   
     @app.route('/categories', methods=['GET'])
     def retrieve_categories():
         categories = func_get_categories()
@@ -58,7 +58,7 @@ def create_app(test_config=None):
         })
 
 
-#GET questions endpoint
+    #GET questions endpoint
     @app.route('/questions', methods=['GET'])
     def retrieve_questions():
         selection = Question.query.order_by(Question.id).all()
@@ -82,7 +82,9 @@ def create_app(test_config=None):
     TEST: When you click the trash icon next to a question, the question will be removed.
     This removal will persist in the database and when you refresh the page.
     """
-# DELETE specific question endpoint
+
+
+    # DELETE specific question endpoint
     @app.route('/questions/<int:question_id>', methods=["DELETE"])
     def delete_specific_question(question_id):
         question = Question.query.get(question_id)
@@ -101,7 +103,8 @@ def create_app(test_config=None):
     the form will clear and the question will appear at the end of the last page
     of the questions list in the "List" tab.
     """
-# POST create & add new question based on a search term 
+
+    # POST create & add new question based on a search term 
     @app.route('/questions', methods=['POST'])
     def create_new_question():
         body = request.get_json()
@@ -117,7 +120,7 @@ def create_app(test_config=None):
             return jsonify({
                 "success": True,
                 "questions": current_question,
-                "total_number_of_questions": len(Question.query.all()), ##find out if the 'key' is corresponding with frontend value
+                "total_number_of_questions": len(Question.query.all()), ##find out if the 'key' is corresponding with frontend value # ie --> var = totalQuestions#
                 "CurrentCategory": 'Entertainment'
             })
         
@@ -134,12 +137,8 @@ def create_app(test_config=None):
             return jsonify({
                 'success': True,
             })
+    
     """
-    @TODO:
-    Create a POST endpoint to get questions based on a search term.
-    It should return any questions for whom the search term
-    is a substring of the question.
-
     TEST: Search by any phrase. The questions list will update to include
     only question that include that string within their question.
     Try using the word "title" to start.
@@ -153,6 +152,21 @@ def create_app(test_config=None):
     categories in the left column will cause only questions of that
     category to be shown.
     """
+    # GET endpoint to retrieve questions from DB in a specific category
+    @app.route('/categories/<int:category_id>/questions')
+    def retrieve_question_in_category(category_id):
+        selection = Question.query.order_by(Question.id).filter(Question.category == category_id)
+        current_questions = paginated_guestions(request, selection)
+
+        if selection:
+            return jsonify({
+                'questions': current_questions,
+                'totalQuestions': len(Question.query.all()),
+                'currentCategory': Category.query.get(category_id).type
+            })
+        else:
+            abort(404)
+    
 
     """
     @TODO:
@@ -166,11 +180,7 @@ def create_app(test_config=None):
     and shown whether they were correct or not.
     """
 
-    """
-    @TODO:
-    Create error handlers for all expected errors
-    including 404 and 422.
-    """
+
 # 404 ERROR endpoint
     @app.errorhandler(404)
     def resource_not_found(error):
