@@ -97,21 +97,43 @@ def create_app(test_config=None):
             abort(404)
             
     """
-    @TODO:
-    Create an endpoint to POST a new question,
-    which will require the question and answer text,
-    category, and difficulty score.
-
     TEST: When you submit a question on the "Add" tab,
     the form will clear and the question will appear at the end of the last page
     of the questions list in the "List" tab.
     """
-# POST create new question
+# POST create & add new question based on a search term 
     @app.route('/questions', methods=['POST'])
-    def new_question():
-        return jsonify({
-            "success": True,
-        })
+    def create_new_question():
+        body = request.get_json()
+        new_question = body.get('question', None)
+        new_answer = body.get('answer', None)
+        new_difficulty = body.get('difficulty', None)
+        new_category = body.get('category', None)
+        search = body.get('searchTerm', None)
+
+        if search:
+            selection = Question.query.order_by(Question.id).filter(Question.question.ilike('%{}%'.format(search)))
+            current_question = paginated_guestions(request, selection)
+            return jsonify({
+                "success": True,
+                "questions": current_question,
+                "total_number_of_questions": len(Question.query.all()), ##find out if the 'key' is corresponding with frontend value
+                "CurrentCategory": 'Entertainment'
+            })
+        
+        else:
+            add_question = Question(
+                question = new_question,
+                answer = new_answer,
+                difficulty = new_difficulty,
+                category = new_category,
+            )
+
+            add_question.insert()
+
+            return jsonify({
+                'success': True,
+            })
     """
     @TODO:
     Create a POST endpoint to get questions based on a search term.
