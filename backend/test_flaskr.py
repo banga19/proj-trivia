@@ -71,7 +71,7 @@ class TriviaTestCase(unittest.TestCase):
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
-        self.assertEqual(data['success'], False)
+        self.assertEqual(data['success'], True)
         self.assertEqual(data['message'], 'Resource Not Found')
 
 
