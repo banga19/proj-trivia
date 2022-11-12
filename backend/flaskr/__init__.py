@@ -91,7 +91,8 @@ def create_app(test_config=None):
             question.delete()
 
             return jsonify({
-                "success": True
+                "success": True,
+                "Deleted_question": question,
             })
         else:
             abort(404)
