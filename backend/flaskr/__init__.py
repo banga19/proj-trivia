@@ -28,7 +28,9 @@ def paginated_guestions(request, selection):
     end = start + QUESTIONS_PER_PAGE
 
     books = [question.format() for question in selection]
-    current_questions = books[start:end] 
+    current_questions = books[start:end]
+
+    return current_questions
 
 
 # Start of trivia app
