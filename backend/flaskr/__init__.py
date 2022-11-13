@@ -97,11 +97,7 @@ def create_app(test_config=None):
         else:
             abort(404)
             
-    """
-    TEST: When you submit a question on the "Add" tab,
-    the form will clear and the question will appear at the end of the last page
-    of the questions list in the "List" tab.
-    """
+
 
     # POST create & add new question based on a search term 
     @app.route('/questions', methods=['POST'])
@@ -137,19 +133,6 @@ def create_app(test_config=None):
                 'success': True,
             })
     
-    """
-    TEST: Search by any phrase. The questions list will update to include
-    only question that include that string within their question.
-    Try using the word "title" to start.
-    """
-
-    """
-    @TODO:
-
-    TEST: In the "List" tab / main screen, clicking on one of the
-    categories in the left column will cause only questions of that
-    category to be shown.
-    """
     # GET endpoint to retrieve questions from DB in a specific category
     @app.route('/categories/<int:category_id>/questions', methods=['POST'])
     def retrieve_question_in_category(category_id):
@@ -160,19 +143,11 @@ def create_app(test_config=None):
             return jsonify({
                 'questions': current_questions,
                 'totalQuestions': len(Question.query.all()),
-                'currentCategory': selection
+                'currentCategory': current_questions
             })
         else:
             abort(404)
     
-
-    """
-    @TODO:
-
-    TEST: In the "Play" tab, after a user selects "All" or a category,
-    one question at a time is displayed, the user is allowed to answer
-    and shown whether they were correct or not.
-    """
 
 # POST endpoint to get questions to play the quiz
     @app.route('/quizes', methods=['POST'])
