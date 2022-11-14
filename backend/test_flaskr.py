@@ -43,14 +43,37 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assserEqual(data['categories'])
 
+    # test to display when user request doesnt repsond to an existing category
+    def test_404_sent_asking_for_non_existing_category(self):
+        res = self.client().get('/categories/5683')
+        data = json.loads(res.data)
+        
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success', False])
+        self.assertEqual(data['message'], 'resource not found')
+
+
+
     # test for GET endpoint responding to retrieving all paginated questions
     def test_retrieve_paginated_questions(self):
-        res = self.client().get('questions')
+        res = self.client().get('/questions')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['total_number_of_questions'])
+        self.assertTrue(len(data['CureentQuestions']))
+        self.assertTrue(len(data['categories']))
+
+    #test 404 when user sends a request for a question beyond valid page
+    def test_404_sent_asking_for_question_past_valid_page(self):
+        res = self.client().get('/questions?page=1523')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'resource not found')
+
 
     # test to DELETE specific using question_id
     def test_delete_specific_question(self):
