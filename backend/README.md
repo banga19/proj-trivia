@@ -375,9 +375,42 @@ Open http://localhost:3000 to view it in the browser. The page will reload if yo
 ```
 
 
+`GET /api/categories/${category_id}/questions`
 
+- fetches all questions in a specific category using the id
+- Returns a JSON object of the questions in a paginated format
+- sample: `curl http://127.0.0.1:5000/categories/5/questions`
 
-
+``` json
+  {
+      "current_category": "Science", 
+      "questions": [
+          {
+              "answer": "The Liver", 
+              "category": 1, 
+              "difficulty": 4, 
+              "id": 20, 
+              "question": "What is the heaviest organ in the human body?"
+          }, 
+          {
+              "answer": "Alexander Fleming", 
+              "category": 1, 
+              "difficulty": 3, 
+              "id": 21, 
+              "question": "Who discovered penicillin?"
+          }, 
+          {
+              "answer": "Blood", 
+              "category": 1, 
+              "difficulty": 4, 
+              "id": 22, 
+              "question": "Hematology is a branch of medicine involving the study of what?"
+          }
+      ], 
+      "success": true, 
+      "total_questions": 18
+  }
+```
 
 
 ## Testing
