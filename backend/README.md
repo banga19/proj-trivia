@@ -412,6 +412,44 @@ Open http://localhost:3000 to view it in the browser. The page will reload if yo
   }
 ```
 
+`POST /quizes`
+- allows users to play the actual quiz
+- fetches questions to play the quiz 
+- request parameteres: category, previous_questions
+- It will return a JSON object with random question not among previous questions.
+- sample URL: `curl http://127.0.0.1:5000/quizzes -X POST -H "Content-Type: application/json" -d '{"previous_questions": [20, 21], "quiz_category": {"type": "Science", "id": "1"}}'`
+
+```json
+  {
+      "question": {
+          "answer": "Blood", 
+          "category": 1, 
+          "difficulty": 4, 
+          "id": 22, 
+          "question": "Hematology is a branch of medicine involving the study of what?"
+      }, 
+      "success": true
+  }
+```
+
+
+## Error Handling 
+
+When the errors occur, they are returned as a JSON format like example below:
+
+```json
+{
+    "success": False,
+    "error": 404,
+    "message": "resource not found"
+}
+```
+
+The Trivia API will return three types of errors as follows:
+- 400: repsonsible dealing with bad requests
+- 404: reponsible for dealing with resources not found 
+- 422: deals with a unprocessable request
+
 
 ## Testing
 

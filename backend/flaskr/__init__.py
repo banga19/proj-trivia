@@ -151,7 +151,7 @@ def create_app(test_config=None):
 
     # POST endpoint to get questions to play the quiz
     @app.route('/quizes', methods=['POST'])
-    def retrieve_random_quizes():
+    def display_random_quizes():
         body = request.get_json()
         previous_questions = body.get('previous_questions', None)
         quiz_category = body.get('quiz_category', None)
