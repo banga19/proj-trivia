@@ -15,7 +15,7 @@ def func_get_categories():
     categories = Category.query.order_by(Category.id).all()
     category_obj = {}
     for category in categories:
-        category_obj[category.id] = category.type
+        category_obj[category.id] = category.type()
     return category_obj
     
 
@@ -77,7 +77,7 @@ def create_app(test_config=None):
                 "categories": categories,
                 "total_number_of_questions": len(Question.query.all()),
                 "questions": current_questions,
-                "currentCategory": 'Science'
+                "currentCategory": categories
             })
 
 
@@ -153,7 +153,6 @@ def create_app(test_config=None):
     @app.route('/quizes', methods=['POST'])
     def retrieve_random_quizes():
         body = request.get_json()
-        print('Hello Here')
         previous_questions = body.get('previous_questions', None)
         quiz_category = body.get('quiz_category', None)
 
@@ -163,14 +162,19 @@ def create_app(test_config=None):
         for question in questions:
             if question.id not in previous_questions:
                 user_selected_question.append(question)
+            
+            else:
+                return print("Could Not process request, Try Again")
 
         random_index = random.randrange(len(user_selected_question))
         random_question = user_selected_question[random_index]
 
         return jsonify({
-            'success': True,
-            'question': random_question.format()
+            "success": True,
+            "Random Question": random_question
+            
         })
+
 
 # ERROR HANDLER ENDPOINTS
 # 404 ERROR endpoint

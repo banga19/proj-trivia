@@ -92,16 +92,26 @@ You will need to provide detailed documentation of your API endpoints including 
 
 `GET /api/questions`
 
-- This endpoint will bring back a list of questions stored in json format.
+- This endpoint will handle GET requests for questions, including pagination (every 10 questions), stored in the database 
 - Request Arguments: None
-- returns: returns questions that are filtered in 10 pages
+- returns: returns a list of questions, number of total questions, current category, categories.
 
-```
+
+``` json
 {
-  'id':1,
-  ''
+  "1": "Do fish have beds to sleep at night?",
+  "total_number_of_questions": 13,
+  "current_categories": "Entertainment",
+  "categories": 
+          {
+            "1": "Science",
+            "2": "Art",
+            "3": "Geography",
+            "4": "History",
+            "5": "Entertainment",
+            "6": "Sports"
+          }
 }
-
 ```
 
 
