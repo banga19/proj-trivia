@@ -114,6 +114,30 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Request Unproccesable')
 
+    # test for user request success scenario when searching for a question
+    def test_search_questions_success_screnario(self):
+        new_user_search_term = {'searchTerm': 'a'}
+        res = self.client().post('/questions/search', json=new_user_search)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertIsNotNone(data['questions'])
+        self.assertIsNotNone(data['total_questions_available'])
+
+    # test for user request success scenario when searching for a question
+    def test_404_search_question_failure_scenario(self):
+        new_user_search_term = {
+            'searchTerm': '899*^$5--',
+        }
+        res = self.client().post('/question/search', json=new_user_search_term)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['sucess'], False)
+        self.assertEqual(data['message'], "The resource you are looking for cannot be found")
+
+
     # 404 ERROR HANDLER test past a valid page request
     def test_404_request_past_valid_page(self):
         res = self.client().get("/questions/1000", json=({'answer': 'Impossible'}))
