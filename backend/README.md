@@ -71,6 +71,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 
 You will need to provide detailed documentation of your API endpoints including the URL, request parameters, and the response body. Use the example below as a reference.
 
+
 ### Documentation Example
 
 `GET '/api/v1.0/categories'`
@@ -89,6 +90,8 @@ You will need to provide detailed documentation of your API endpoints including 
   "6": "Sports"
 }
 ```
+
+### start of Endpoint Documentation for sample requests
 
 `GET /api/questions`
 
@@ -113,6 +116,24 @@ You will need to provide detailed documentation of your API endpoints including 
           }
 }
 ```
+
+`GET /api/categories`
+- fetches for all available categories in the DATABASE
+- request parameters: None
+- return: list of categories in json format
+
+``` json
+  "categories": 
+          {
+            "1": "Science",
+            "2": "Art",
+            "3": "Geography",
+            "4": "History",
+            "5": "Entertainment",
+            "6": "Sports"
+          }
+```
+
 
 
 ## Testing
