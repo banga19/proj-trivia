@@ -72,15 +72,25 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'resource not found')
+        self.assertEqual(data['message'], 'resource not found') 
 
 
     # test to DELETE specific using question_id
-    def test_delete_specific_question(self):
+    def test_delete_specific_question(self):    
         res = self.client().delete('questions/2')
 
         question_to_delete = Question.query.filter(Question.id == 2).one_or_none()
         self.assertEqual(question_to_delete, None)
+    
+    # test to delete specific question Failure scenario
+    def test_422_deleting_non_existing_question(self):
+        res = self.client().delete('/question/12')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success', False])
+        self.assertEqual(data['message'], 'Request Unprocessable')
+    
 
     #test to CREATE new question 
     def test_create_new_question(self):
