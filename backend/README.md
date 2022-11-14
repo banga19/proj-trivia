@@ -134,6 +134,17 @@ You will need to provide detailed documentation of your API endpoints including 
           }
 ```
 
+`DELETE /question/${id}`
+- DELETES question selected by user according to the Id
+- request parameters: question_id
+- return: A statment saying the deleted question using the 'ID' as the key and the 'specific question' as the value
+
+``` json
+{
+  "12": "Where did the sun originate from"  
+}
+
+```
 
 
 ## Testing

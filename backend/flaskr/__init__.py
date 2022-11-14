@@ -149,7 +149,7 @@ def create_app(test_config=None):
             abort(404)
     
 
-# POST endpoint to get questions to play the quiz
+    # POST endpoint to get questions to play the quiz
     @app.route('/quizes', methods=['POST'])
     def retrieve_random_quizes():
         body = request.get_json()
@@ -165,6 +165,7 @@ def create_app(test_config=None):
             
             else:
                 return print("Could Not process request, Try Again")
+
 
         random_index = random.randrange(len(user_selected_question))
         random_question = user_selected_question[random_index]
