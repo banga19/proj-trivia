@@ -72,28 +72,20 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 You will need to provide detailed documentation of your API endpoints including the URL, request parameters, and the response body. Use the example below as a reference.
 
 
-### Documentation Example
+### Running the server in Dev mode
+The frontend app was built using create-react-app. In order to run the app in development mode use npm start. You can change the script in the package.json file.
 
-`GET '/api/v1.0/categories'`
+Open http://localhost:3000 to view it in the browser. The page will reload if you make edits.
 
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
+`npm start`
 
-```json
-{
-  "1": "Science",
-  "2": "Art",
-  "3": "Geography",
-  "4": "History",
-  "5": "Entertainment",
-  "6": "Sports"
-}
-```
 
-### start of Endpoint Documentation for sample requests
+
+# API reference
+## start of Endpoint Documentation for sample requests
 
 `GET /api/questions`
+- `sample: curl http://127.0.0.1:5000/questions`
 
 - This endpoint will handle GET requests for questions, including pagination (every 10 questions), stored in the database 
 - Request Arguments: None
@@ -101,20 +93,90 @@ You will need to provide detailed documentation of your API endpoints including 
 
 
 ``` json
-{
-  "1": "Do fish have beds to sleep at night?",
-  "total_number_of_questions": 13,
-  "current_categories": "Entertainment",
-  "categories": 
+ {
+      "categories": {
+          "1": "Science", 
+          "2": "Art", 
+          "3": "Geography", 
+          "4": "History", 
+          "5": "Entertainment", 
+          "6": "Sports"
+      }, 
+      "questions": [
           {
-            "1": "Science",
-            "2": "Art",
-            "3": "Geography",
-            "4": "History",
-            "5": "Entertainment",
-            "6": "Sports"
+              "answer": "Colorado, New Mexico, Arizona, Utah", 
+              "category": 3, 
+              "difficulty": 3, 
+              "id": 164, 
+              "question": "Which four states make up the 4 Corners region of the US?"
+          }, 
+          {
+              "answer": "Muhammad Ali", 
+              "category": 4, 
+              "difficulty": 1, 
+              "id": 9, 
+              "question": "What boxer's original name is Cassius Clay?"
+          }, 
+          {
+              "answer": "Apollo 13", 
+              "category": 5, 
+              "difficulty": 4, 
+              "id": 2, 
+              "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+          }, 
+          {
+              "answer": "Tom Cruise", 
+              "category": 5, 
+              "difficulty": 4, 
+              "id": 4, 
+              "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+          }, 
+          {
+              "answer": "Edward Scissorhands", 
+              "category": 5, 
+              "difficulty": 3, 
+              "id": 6, 
+              "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+          }, 
+          {
+              "answer": "Brazil", 
+              "category": 6, 
+              "difficulty": 3, 
+              "id": 10, 
+              "question": "Which is the only team to play in every soccer World Cup tournament?"
+          }, 
+          {
+              "answer": "Uruguay", 
+              "category": 6, 
+              "difficulty": 4, 
+              "id": 11, 
+              "question": "Which country won the first ever soccer World Cup in 1930?"
+          }, 
+          {
+              "answer": "George Washington Carver", 
+              "category": 4, 
+              "difficulty": 2, 
+              "id": 12, 
+              "question": "Who invented Peanut Butter?"
+          }, 
+          {
+              "answer": "Lake Victoria", 
+              "category": 3, 
+              "difficulty": 2, 
+              "id": 13, 
+              "question": "What is the largest lake in Africa?"
+          }, 
+          {
+              "answer": "The Palace of Versailles", 
+              "category": 3, 
+              "difficulty": 3, 
+              "id": 14, 
+              "question": "In which royal palace would you find the Hall of Mirrors?"
           }
-}
+      ], 
+      "success": true, 
+      "total_questions": 19
+  }
 ```
 
 `GET /api/categories`
@@ -131,7 +193,8 @@ You will need to provide detailed documentation of your API endpoints including 
             "4": "History",
             "5": "Entertainment",
             "6": "Sports"
-          }
+          },
+          "success": true,
 ```
 
 `DELETE /question/${id}`
@@ -141,7 +204,8 @@ You will need to provide detailed documentation of your API endpoints including 
 
 ``` json
 {
-  "12": "Where did the sun originate from"  
+  "delted_quesition": 5,
+  "success": true 
 }
 
 ```
