@@ -77,7 +77,7 @@ The frontend app was built using create-react-app. In order to run the app in de
 
 Open http://localhost:3000 to view it in the browser. The page will reload if you make edits.
 
-`npm start`
+`npm start` 
 
 
 
@@ -180,6 +180,7 @@ Open http://localhost:3000 to view it in the browser. The page will reload if yo
 ```
 
 `GET /api/categories`
+  - `sample: curl -X GET http://127.0.0.1:5000/categories`
 - fetches for all available categories in the DATABASE
 - request parameters: None
 - return: list of categories in json format
@@ -198,6 +199,7 @@ Open http://localhost:3000 to view it in the browser. The page will reload if yo
 ```
 
 `DELETE /question/${id}`
+  `sample: curl -X DELETE http://127.0.0.1:5000/questions/5`
 - DELETES question selected by user according to the Id
 - request parameters: question_id
 - return: A statment saying the deleted question using the 'ID' as the key and the 'specific question' as the value
@@ -209,6 +211,173 @@ Open http://localhost:3000 to view it in the browser. The page will reload if yo
 }
 
 ```
+
+
+` POST /api/questions`
+
+- endpoint adds new question or returns search results
+
+1. situation where **no** search term is addes to the request:
+    - It will create a new question using JSON request parameters
+    - Returns a JSON object with newly added question, in paginated form
+    - sample: `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{ "question": "Which US state contains an area known as the Upper Penninsula?", "answer": "Michigan", "difficulty": 3, "category": "3" }'` 
+
+``` json
+  {
+      "created": 173, 
+      "question_created": "Which US state contains an area known as the Upper Penninsula?", 
+      "questions": [
+          {
+              "answer": "Apollo 13", 
+              "category": 5, 
+              "difficulty": 4, 
+              "id": 2, 
+              "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+          }, 
+          {
+              "answer": "Tom Cruise", 
+              "category": 5, 
+              "difficulty": 4, 
+              "id": 4, 
+              "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+          }, 
+          {
+              "answer": "Muhammad Ali", 
+              "category": 4, 
+              "difficulty": 1, 
+              "id": 9, 
+              "question": "What boxer's original name is Cassius Clay?"
+          }, 
+          {
+              "answer": "Brazil", 
+              "category": 6, 
+              "difficulty": 3, 
+              "id": 10, 
+              "question": "Which is the only team to play in every soccer World Cup tournament?"
+          }, 
+          {
+              "answer": "Uruguay", 
+              "category": 6, 
+              "difficulty": 4, 
+              "id": 11, 
+              "question": "Which country won the first ever soccer World Cup in 1930?"
+          }, 
+          {
+              "answer": "George Washington Carver", 
+              "category": 4, 
+              "difficulty": 2, 
+              "id": 12, 
+              "question": "Who invented Peanut Butter?"
+          }, 
+          {
+              "answer": "Lake Victoria", 
+              "category": 3, 
+              "difficulty": 2, 
+              "id": 13, 
+              "question": "What is the largest lake in Africa?"
+          }, 
+          {
+              "answer": "The Palace of Versailles", 
+              "category": 3, 
+              "difficulty": 3, 
+              "id": 14, 
+              "question": "In which royal palace would you find the Hall of Mirrors?"
+          }, 
+          {
+              "answer": "Agra", 
+              "category": 3, 
+              "difficulty": 2, 
+              "id": 15, 
+              "question": "The Taj Mahal is located in which Indian city?"
+          }, 
+          {
+              "answer": "Escher", 
+              "category": 2, 
+              "difficulty": 1, 
+              "id": 16, 
+              "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
+          }
+      ], 
+      "success": true, 
+      "total_questions": 20
+  }
+```
+
+
+2. situation where search term **is** included:
+    - function below decorator will search for questions using search term in JSON request parameters.
+    - It will then return a JSON object with matching questions in paginated format
+    - sample: `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"searchTerm": "which"}'`
+
+``` json
+  {
+      "questions": [
+          {
+              "answer": "Brazil", 
+              "category": 6, 
+              "difficulty": 3, 
+              "id": 10, 
+              "question": "Which is the only team to play in every soccer World Cup tournament?"
+          }, 
+          {
+              "answer": "Uruguay", 
+              "category": 6, 
+              "difficulty": 4, 
+              "id": 11, 
+              "question": "Which country won the first ever soccer World Cup in 1930?"
+          }, 
+          {
+              "answer": "The Palace of Versailles", 
+              "category": 3, 
+              "difficulty": 3, 
+              "id": 14, 
+              "question": "In which royal palace would you find the Hall of Mirrors?"
+          }, 
+          {
+              "answer": "Agra", 
+              "category": 3, 
+              "difficulty": 2, 
+              "id": 15, 
+              "question": "The Taj Mahal is located in which Indian city?"
+          }, 
+          {
+              "answer": "Escher", 
+              "category": 2, 
+              "difficulty": 1, 
+              "id": 16, 
+              "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
+          }, 
+          {
+              "answer": "Jackson Pollock", 
+              "category": 2, 
+              "difficulty": 2, 
+              "id": 19, 
+              "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
+          }, 
+          {
+              "answer": "Scarab", 
+              "category": 4, 
+              "difficulty": 4, 
+              "id": 23, 
+              "question": "Which dung beetle was worshipped by the ancient Egyptians?"
+          }, 
+          {
+              "answer": "Michigan", 
+              "category": 3, 
+              "difficulty": 3, 
+              "id": 173, 
+              "question": "Which US state contains an area known as the Upper Penninsula?"
+          }
+      ], 
+      "success": true, 
+      "total_questions": 18
+  }
+```
+
+
+
+
+
 
 
 ## Testing
