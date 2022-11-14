@@ -92,14 +92,28 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'Request Unprocessable')
     
 
-    #test to CREATE new question 
-    def test_create_new_question(self):
+    #test to ADD new question 
+    def test_add_new_question(self):
         res = self.client().post('questions', json={'question': 'Heres a new question in form of a string', 'answer': 'Here is an answer string', 'difficulty':1, 'category':3})
         data = json.loads(res.data)
         
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
     
+    # test to show failure when adding new question
+    def test_for_422_error_adding_new_question(self):
+        new_question = {
+            'question': 'is a fork a spoon?',
+            'answer': 'user answer',
+            'category': 5,
+        }
+        res = self.client().post('/questions', json=new_question)
+        data = json.loads(res.data)
+        
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Request Unproccesable')
+
     # 404 ERROR HANDLER test past a valid page request
     def test_404_request_past_valid_page(self):
         res = self.client().get("/questions/1000", json=({'answer': 'Impossible'}))
