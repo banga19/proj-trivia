@@ -116,8 +116,8 @@ class TriviaTestCase(unittest.TestCase):
 
     # test for user request success scenario when searching for a question
     def test_search_questions_success_screnario(self):
-        new_user_search_term = {'searchTerm': 'a'}
-        res = self.client().post('/questions/search', json=new_user_search)
+        new_user_search_term = {'searchTerm': 'sq343841'}
+        res = self.client().post('/questions/search', json=new_user_search_term)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -136,6 +136,26 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['sucess'], False)
         self.assertEqual(data['message'], "The resource you are looking for cannot be found")
+
+    # test success scenario for getting questions by category
+    def test_retrieve_questions_by_category(self):
+        res = self.client().get('/categories/3/questions')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['questions']))
+        self.assertTrue(data['total_questions_available'])
+        self.assertTrue(data['current-category'])
+
+    # test failure scenario for getting questions by category
+    def test_404_to_retrieve_questions_by_category(self):
+        res = self.client().get('/categories/l/questions')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["message"], "The resource you are looking for could not be found")
 
 
     # 404 ERROR HANDLER test past a valid page request
