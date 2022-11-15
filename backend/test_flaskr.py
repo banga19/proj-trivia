@@ -157,6 +157,26 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], False)
         self.assertEqual(data["message"], "The resource you are looking for could not be found")
 
+    # test success scenario for when user plays actual quiz
+    def test_display_random_quizes_to_play(self):
+        new_quiz_session_play = {'previous_questions': [],
+                            'quiz_category': {'type': 'History', 'id': 3}}
+
+        res = self.client().post('/quizzes', json=new_quiz_session_play)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    #test failure scenario for for when user plays actual quiz
+    def test_404_play_quiz_in_random(self):
+        new_quiz_session_play = {'previous_questions': []}
+        res = self.client().post('/quizzes', json=new_quiz_session_play)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["message"], "Request Unprocessable")
 
     # 404 ERROR HANDLER test past a valid page request
     def test_404_request_past_valid_page(self):
