@@ -15,7 +15,7 @@ def func_get_categories():
     categories = Category.query.order_by(Category.id).all()
     category_obj = {}
     for category in categories:
-        category_obj[category.id] = category.type()
+        category_obj[Category.id] = category.type()
     return category_obj
     
 
