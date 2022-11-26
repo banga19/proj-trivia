@@ -9,30 +9,34 @@ DB_HOST = os.getenv('DB_HOST', '127.0.0.1:5432')
 DB_USER = os.getenv('DB_USER', 'student')
 DB_PASSWORD = os.getenv('DB_PASSWORD', 'student')
 DB_NAME = os.getenv('DB_NAME', 'trivia')
-DB_PATH = 'postgresql+psycopg2://{}:{}@{}/{}'.format(DB_USER, DB_PASSWORD, DB_HOST, DB_NAME)
+DB_PATH = 'postgresql+psycopg2://{}:{}@{}/{}'.format(DB_USER,
+                            DB_PASSWORD, DB_HOST, DB_NAME)
 
-# older version below
-
-# database_name = 'trivia'
-# database_path = 'postgres://{}:{}@{}/{}'.format('student','student','localhost:5432', database_name)
 
 db = SQLAlchemy()
 
 """
 setup_db(app)
-    binds a flask application and a SQLAlchemy service
+    binds a flask application
+    and a SQLAlchemy service
 """
+
+
 def setup_db(app, database_path=DB_PATH):
+
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    db.app = app( "environ", "start_response")
+    db.app = app("environ", "start_response")
     db.init_app(app)
     db.create_all()
+
 
 """
 Question
 
 """
+
+
 class Question(db.Model):
     __tablename__ = 'questions'
 
@@ -68,10 +72,13 @@ class Question(db.Model):
             'difficulty': self.difficulty
             }
 
+
 """
 Category
 
 """
+
+
 class Category(db.Model):
     __tablename__ = 'categories'
 
