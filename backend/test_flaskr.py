@@ -4,7 +4,7 @@ import json
 from flask_sqlalchemy import SQLAlchemy
 
 from flaskr import create_app
-from .flaskr.models import setup_db, Question, Category
+from models import setup_db, Question, Category
 
 
 class TriviaTestCase(unittest.TestCase):
@@ -15,7 +15,7 @@ class TriviaTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "trivia_test"
-        self.database_path = 'postgresql://{}/{}'.format("localhost:5432", 
+        self.database_path = 'postgresql://{}@{}:{}/{}'.format("student", "student","localhost:5432", 
             self.database_name)
         setup_db(self.app, self.database_path)
 
