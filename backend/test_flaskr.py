@@ -15,8 +15,10 @@ class TriviaTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "trivia_test"
-        self.database_path = 'postgres://{}/{}'.format(
-            'localhost:5432', self.database_name)
+        self.database_user = "student"
+        self.database_password = "student"
+        self.database_path = 'postgresql+psycopg2://{}:{}@{}/{}'.format(
+            self.database_user, self.database_password, 'localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
         # sample question for use in testing the api
@@ -42,7 +44,21 @@ class TriviaTestCase(unittest.TestCase):
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
-    # test for GET request to show all categories
+    # test below to GET reponse and add data. 
+    # it will also test for pagination success
+    def test_get_questions_paginated(self):
+
+        response = self.client().get('/questions') 
+        data = json.loads(response.data)
+
+        # check for status code and message
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['succes'], True)
+
+        # check total questions and returns and the questions return data
+        self.assertTrue(data['total_questions'])
+        self.assertTrue(len(data['questions']))
+
 
 
 # Make the tests conveniently executable
