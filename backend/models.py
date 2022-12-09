@@ -26,6 +26,7 @@ def setup_db(app, database_path=DB_PATH):
 
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["PYTHONUNBUFFERED"]= ""
     db.app = app
     db.init_app(app)
     db.create_all()

@@ -17,7 +17,7 @@ def func_get_categories():
         category_obj[Category.id] = category.type()
     return category_obj
     
-
+# pagination
 QUESTIONS_PER_PAGE = 10
 
 # create pagination effect for the app
