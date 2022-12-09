@@ -8,7 +8,7 @@ import random
 import collections 
 collections.Iterable = collections.abc.Iterable
 
-from models import setup_db, Question, Category
+from backend.flaskr.models import setup_db, Question, Category
 
 # global GET categories func
 def func_get_categories():
