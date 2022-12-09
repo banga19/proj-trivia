@@ -1,12 +1,11 @@
 import os
 from unicodedata import category
-from urllib import response
+from select import select
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
-import collections 
-collections.Iterable = collections.abc.Iterable
+
 
 from models import setup_db, Question, Category
 
